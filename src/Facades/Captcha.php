@@ -9,6 +9,7 @@ use Lacaptcha\Lacaptcha\Testing\CaptchaFake;
 /**
  * @method static \Lacaptcha\Lacaptcha\Contracts\Driver driver(?string $driver = null)
  * @method static \Lacaptcha\Lacaptcha\DataTransferObjects\CaptchaResponse verify(string $token, ?string $remoteIp = null)
+ * @method static \Illuminate\Contracts\View\View widget(?string $driver = null, array $options = [])
  *
  * @see CaptchaManager
  */

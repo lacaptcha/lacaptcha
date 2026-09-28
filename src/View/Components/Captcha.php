@@ -19,8 +19,6 @@ class Captcha extends Component
 
     public function render(): View
     {
-        $driver = $this->manager->driver($this->driver);
-
-        return view($driver->view(), $driver->widgetData($this->options));
+        return $this->manager->widget($this->driver, $this->options);
     }
 }

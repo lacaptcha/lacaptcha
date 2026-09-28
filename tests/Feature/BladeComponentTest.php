@@ -41,3 +41,32 @@ it('uses the configured default driver when none is specified', function () {
 
     expect($html)->toContain('cf-turnstile');
 });
+
+it('renders @captcha identically to <x-captcha /> for the default driver', function () {
+    $component = Blade::render('<x-captcha />');
+    $directive = Blade::render('@captcha');
+
+    expect($directive)->toBe($component);
+});
+
+it('renders @captcha(driver) identically to <x-captcha driver="..." />', function () {
+    $component = Blade::render('<x-captcha driver="turnstile" />');
+    $directive = Blade::render("@captcha('turnstile')");
+
+    expect($directive)->toBe($component);
+});
+
+it('renders @captcha(driver, options) identically to <x-captcha driver :options />', function () {
+    $component = Blade::render('<x-captcha driver="recaptcha" :options="[\'action\' => \'login\']" />');
+    $directive = Blade::render("@captcha('recaptcha', ['action' => 'login'])");
+
+    expect($directive)->toBe($component);
+});
+
+it('uses the configured default driver when none is specified via @captcha', function () {
+    config()->set('captcha.default', 'turnstile');
+
+    $html = Blade::render('@captcha');
+
+    expect($html)->toContain('cf-turnstile');
+});

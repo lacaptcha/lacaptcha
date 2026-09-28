@@ -2,6 +2,7 @@
 
 namespace Lacaptcha\Lacaptcha;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Manager;
 use Illuminate\Support\Str;
@@ -29,6 +30,20 @@ class CaptchaManager extends Manager
     public function verify(string $token, ?string $remoteIp = null): CaptchaResponse
     {
         return $this->driver()->verify($token, $remoteIp);
+    }
+
+    /**
+     * Resolve a driver by name and turn it into its renderable widget view.
+     * The single source of truth used by both the <x-captcha /> component
+     * and the @captcha Blade directive.
+     *
+     * @param  array<string, mixed>  $options
+     */
+    public function widget(?string $driver = null, array $options = []): View
+    {
+        $driver = $this->driver($driver);
+
+        return view($driver->view(), $driver->widgetData($options));
     }
 
     protected function createHcaptchaDriver(): Driver

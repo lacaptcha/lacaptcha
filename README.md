@@ -69,6 +69,14 @@ Override the driver per-call regardless of the configured default:
 <x-captcha driver="recaptcha" :options="['action' => 'login']" />
 ```
 
+Alternatively, using the `@captcha` Blade directive — it renders identically to `<x-captcha />` since both share the same underlying `CaptchaManager::widget()` method:
+
+```blade
+@captcha
+@captcha('turnstile')
+@captcha('recaptcha', ['action' => 'login'])
+```
+
 ### Validation
 
 ```php

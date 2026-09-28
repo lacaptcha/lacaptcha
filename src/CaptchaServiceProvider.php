@@ -23,6 +23,10 @@ class CaptchaServiceProvider extends ServiceProvider
 
         Blade::component(Captcha::class, 'captcha');
 
+        Blade::directive('captcha', function (string $expression) {
+            return "<?php echo app(\Lacaptcha\Lacaptcha\CaptchaManager::class)->widget({$expression})->render(); ?>";
+        });
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/captcha.php' => config_path('captcha.php'),
