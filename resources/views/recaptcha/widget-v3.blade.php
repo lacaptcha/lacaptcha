@@ -11,18 +11,32 @@
         var field = document.currentScript.previousElementSibling;
         var form = field.closest('form');
 
-        function execute() {
-            grecaptcha.ready(function () {
-                grecaptcha.execute(siteKey, { action: action }).then(function (token) {
-                    field.value = token;
+        function refreshToken() {
+            return new Promise(function (resolve) {
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(siteKey, { action: action }).then(function (token) {
+                        field.value = token;
+                        resolve(token);
+                    });
                 });
             });
         }
 
         if (form) {
-            form.addEventListener('submit', execute);
+            // v3 tokens are short-lived, so a fresh one is fetched at submit
+            // time; the native submit is held back with preventDefault()
+            // until that token is in place, then re-triggered via
+            // form.submit() (which does not re-fire the "submit" event, so
+            // this does not recurse).
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                refreshToken().then(function () {
+                    form.submit();
+                });
+            });
         }
 
-        execute();
+        refreshToken();
     })();
 </script>

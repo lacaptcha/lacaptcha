@@ -30,9 +30,10 @@ trait VerifiesViaHttp
 
     /**
      * POST the given form params to a siteverify-style endpoint and return
-     * the decoded JSON payload, defensively handling non-JSON responses and
-     * connection failures so a network hiccup never bubbles out of a
-     * validation rule as an uncaught exception.
+     * the decoded JSON payload, defensively handling non-JSON (or
+     * JSON-but-not-array, e.g. a WAF/maintenance page returning a bare
+     * scalar) responses and connection failures so neither ever bubbles out
+     * of a validation rule as an uncaught exception.
      *
      * @param  array<string, mixed>  $params
      * @return array<string, mixed>
@@ -45,6 +46,8 @@ trait VerifiesViaHttp
             return ['success' => false, 'error-codes' => ['connection-failed']];
         }
 
-        return $response->json() ?? ['success' => false, 'error-codes' => ['invalid-response']];
+        $payload = $response->json();
+
+        return is_array($payload) ? $payload : ['success' => false, 'error-codes' => ['invalid-response']];
     }
 }

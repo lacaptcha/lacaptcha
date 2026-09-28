@@ -42,3 +42,14 @@ it('fails gracefully on a connection failure', function () {
     expect($response->failed())->toBeTrue()
         ->and($response->errorCodes)->toBe(['connection-failed']);
 });
+
+it('fails gracefully when the provider returns a valid but non-array JSON body', function () {
+    Http::fake([
+        'hcaptcha.com/siteverify' => Http::response('0', 200, ['Content-Type' => 'application/json']),
+    ]);
+
+    $response = app(CaptchaManager::class)->driver('hcaptcha')->verify('token-123');
+
+    expect($response->failed())->toBeTrue()
+        ->and($response->errorCodes)->toBe(['invalid-response']);
+});

@@ -44,3 +44,13 @@ it('defaults success to false and error codes to an empty array when missing', f
         ->and($response->failed())->toBeTrue()
         ->and($response->errorCodes)->toBe([]);
 });
+
+it('normalizes a non-array error-codes field instead of throwing', function () {
+    $response = CaptchaResponse::fromArray([
+        'success' => false,
+        'error-codes' => 'invalid-input-response',
+    ]);
+
+    expect($response->failed())->toBeTrue()
+        ->and($response->errorCodes)->toBe([]);
+});

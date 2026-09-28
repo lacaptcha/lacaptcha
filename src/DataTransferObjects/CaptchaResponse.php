@@ -26,9 +26,11 @@ final readonly class CaptchaResponse
      */
     public static function fromArray(array $payload): self
     {
+        $errorCodes = $payload['error-codes'] ?? $payload['error_codes'] ?? [];
+
         return new self(
             success: (bool) ($payload['success'] ?? false),
-            errorCodes: $payload['error-codes'] ?? $payload['error_codes'] ?? [],
+            errorCodes: is_array($errorCodes) ? array_values($errorCodes) : [],
             challengeTs: $payload['challenge_ts'] ?? null,
             hostname: $payload['hostname'] ?? null,
             score: isset($payload['score']) ? (float) $payload['score'] : null,
