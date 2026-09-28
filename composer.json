@@ -1,0 +1,53 @@
+{
+    "name": "lacaptcha/lacaptcha",
+    "description": "Multi-provider captcha integration for Laravel (hCaptcha, Google reCAPTCHA v2/v3, Cloudflare Turnstile) with a Manager-based driver system.",
+    "keywords": ["laravel", "captcha", "hcaptcha", "recaptcha", "turnstile", "validation"],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.3",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "illuminate/validation": "^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0|^5.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0|^5.0",
+        "mockery/mockery": "^1.6",
+        "laravel/pint": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lacaptcha\\Lacaptcha\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lacaptcha\\Lacaptcha\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lacaptcha\\Lacaptcha\\CaptchaServiceProvider"
+            ],
+            "aliases": {
+                "Captcha": "Lacaptcha\\Lacaptcha\\Facades\\Captcha"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint"
+    }
+}
