@@ -37,13 +37,23 @@ class CaptchaManager extends Manager
      * The single source of truth used by both the <x-captcha /> component
      * and the @captcha Blade directive.
      *
+     * A validation error for the driver's response field is shown
+     * automatically beneath the widget, when one is present; pass
+     * `showErrors: false` in $options to turn that off and handle error
+     * display yourself (see Driver::responseField() / responseField()).
+     *
      * @param  array<string, mixed>  $options
      */
     public function widget(?string $driver = null, array $options = []): View
     {
         $driver = $this->driver($driver);
+        $showErrors = (bool) ($options['showErrors'] ?? true);
+        unset($options['showErrors']);
 
-        return view($driver->view(), $driver->widgetData($options));
+        return view($driver->view(), array_merge($driver->widgetData($options), [
+            'responseField' => $driver->responseField(),
+            'showErrors' => $showErrors,
+        ]));
     }
 
     /**

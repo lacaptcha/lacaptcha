@@ -3,3 +3,5 @@
 @endonce
 
 <div class="g-recaptcha" data-sitekey="{{ $siteKey }}"></div>
+
+@include('lacaptcha::_error', ['field' => $responseField, 'show' => $showErrors])

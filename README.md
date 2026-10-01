@@ -91,11 +91,29 @@ $request->validate([
 
 ### Error handling
 
+`<x-captcha />` and `@captcha` automatically show a validation error for their driver's
+response field, if one is present — no manual `@error()` block needed:
+
+```blade
+<x-captcha :driver="$driver" />
+@captcha($driver)
+```
+
+It renders as `<p class="lacaptcha-error">{{ message }}</p>` directly beneath the widget,
+with no color/spacing of its own — style it in your own CSS via the `.lacaptcha-error`
+class. Turn it off with `showErrors: false` to handle error display yourself:
+
+```blade
+<x-captcha :driver="$driver" :options="['showErrors' => false]" />
+@captcha($driver, ['showErrors' => false])
+```
+
 Each driver's widget populates a provider-specific form field (`h-captcha-response`,
 `g-recaptcha-response`, `cf-turnstile-response`, ...), which is also the field name a
-validation failure attaches its error to. If your app supports switching drivers (so you
-can't hardcode that field name), ask the package for it via `CaptchaManager::responseField()`
-instead of duplicating the provider → field-name mapping yourself:
+validation failure attaches its error to — the widget already knows it via
+`Driver::responseField()`. If your app supports switching drivers (so you can't hardcode
+that field name in your own `$request->validate([...])` call), ask the package for it the
+same way instead of duplicating the provider → field-name mapping yourself:
 
 ```php
 use Lacaptcha\Lacaptcha\CaptchaManager;
@@ -113,17 +131,6 @@ public function store(Request $request, CaptchaManager $captcha)
     // ...
 }
 ```
-
-```blade
-<x-captcha :driver="$driver" />
-
-@error($field)
-    <p>{{ $message }}</p>
-@enderror
-```
-
-The widget itself never renders an error message — only the challenge markup — so the
-placement, tag, and styling of that `@error` block are entirely up to your app.
 
 ### Facade
 
@@ -170,7 +177,9 @@ No changes are needed to the Blade component, validation rule, facade, or servic
 
 1. Implement `Lacaptcha\Lacaptcha\Contracts\Driver` in a new `Drivers/XDriver.php`.
 2. Add a `createXDriver()` factory method to `CaptchaManager`.
-3. Add a widget view, e.g. `resources/views/x/widget.blade.php`.
+3. Add a widget view, e.g. `resources/views/x/widget.blade.php`, ending with
+   `@include('lacaptcha::_error', ['field' => $responseField, 'show' => $showErrors])`
+   so it gets automatic error display like every other driver.
 4. Add a `drivers.x` block to `config/captcha.php`.
 
 `Drivers/NullDriver.php` is a complete, working example of exactly this.
