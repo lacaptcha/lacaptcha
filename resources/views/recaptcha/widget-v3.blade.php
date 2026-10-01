@@ -40,5 +40,3 @@
         refreshToken();
     })();
 </script>
-
-@include('lacaptcha::_error', ['field' => $responseField, 'show' => $showErrors])

@@ -3,5 +3,3 @@
 @endonce
 
 <div class="cf-turnstile" data-sitekey="{{ $siteKey }}" data-theme="{{ $theme }}"></div>
-
-@include('lacaptcha::_error', ['field' => $responseField, 'show' => $showErrors])

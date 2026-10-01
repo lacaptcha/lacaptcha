@@ -173,13 +173,14 @@ reCAPTCHA v3 always reports `success: true` for a structurally valid token — s
 
 ## Adding a new driver
 
-No changes are needed to the Blade component, validation rule, facade, or service provider registration — only:
+No changes are needed to the Blade component, validation rule, facade, service provider
+registration, or error display (handled centrally by `CaptchaManager::widget()` for every
+driver) — only:
 
 1. Implement `Lacaptcha\Lacaptcha\Contracts\Driver` in a new `Drivers/XDriver.php`.
 2. Add a `createXDriver()` factory method to `CaptchaManager`.
-3. Add a widget view, e.g. `resources/views/x/widget.blade.php`, ending with
-   `@include('lacaptcha::_error', ['field' => $responseField, 'show' => $showErrors])`
-   so it gets automatic error display like every other driver.
+3. Add a widget view, e.g. `resources/views/x/widget.blade.php`, containing only the
+   provider's own markup/script.
 4. Add a `drivers.x` block to `config/captcha.php`.
 
 `Drivers/NullDriver.php` is a complete, working example of exactly this.

@@ -48,12 +48,14 @@ class CaptchaManager extends Manager
     {
         $driver = $this->driver($driver);
         $showErrors = (bool) ($options['showErrors'] ?? true);
-        unset($options['showErrors']);
+        unset($options['showErrors'], $options['responseField']);
 
-        return view($driver->view(), array_merge($driver->widgetData($options), [
+        return view('lacaptcha::_widget', [
+            'view' => $driver->view(),
+            'data' => $driver->widgetData($options),
             'responseField' => $driver->responseField(),
             'showErrors' => $showErrors,
-        ]));
+        ]);
     }
 
     /**
