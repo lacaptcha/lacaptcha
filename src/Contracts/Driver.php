@@ -28,4 +28,12 @@ interface Driver
      * The driver's registered name (e.g. "hcaptcha").
      */
     public function name(): string;
+
+    /**
+     * The form field name this driver's widget populates with its token
+     * (e.g. "h-captcha-response"), so a validation rule and its matching
+     * error-display markup can reference the same field without the
+     * consuming app having to know or hardcode each provider's own naming.
+     */
+    public function responseField(): string;
 }

@@ -42,4 +42,9 @@ class TurnstileDriver implements Driver
     {
         return 'turnstile';
     }
+
+    public function responseField(): string
+    {
+        return 'cf-turnstile-response';
+    }
 }

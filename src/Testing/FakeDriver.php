@@ -46,4 +46,9 @@ class FakeDriver implements Driver
     {
         return $this->driverName;
     }
+
+    public function responseField(): string
+    {
+        return $this->realDriver?->responseField() ?? 'captcha-response';
+    }
 }

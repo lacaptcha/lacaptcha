@@ -89,6 +89,42 @@ $request->validate([
 ]);
 ```
 
+### Error handling
+
+Each driver's widget populates a provider-specific form field (`h-captcha-response`,
+`g-recaptcha-response`, `cf-turnstile-response`, ...), which is also the field name a
+validation failure attaches its error to. If your app supports switching drivers (so you
+can't hardcode that field name), ask the package for it via `CaptchaManager::responseField()`
+instead of duplicating the provider → field-name mapping yourself:
+
+```php
+use Lacaptcha\Lacaptcha\CaptchaManager;
+use Lacaptcha\Lacaptcha\Rules\Captcha;
+
+public function store(Request $request, CaptchaManager $captcha)
+{
+    $driver = $request->input('driver', config('captcha.default'));
+    $field = $captcha->responseField($driver); // or ->responseField() for the default driver
+
+    $request->validate([
+        $field => ['required', new Captcha($driver)],
+    ]);
+
+    // ...
+}
+```
+
+```blade
+<x-captcha :driver="$driver" />
+
+@error($field)
+    <p>{{ $message }}</p>
+@enderror
+```
+
+The widget itself never renders an error message — only the challenge markup — so the
+placement, tag, and styling of that `@error` block are entirely up to your app.
+
 ### Facade
 
 ```php
@@ -96,6 +132,7 @@ use Lacaptcha\Lacaptcha\Facades\Captcha;
 
 Captcha::verify($token);                 // uses the default driver
 Captcha::driver('turnstile')->verify($token);
+Captcha::responseField('turnstile');     // 'cf-turnstile-response'
 ```
 
 ## Testing

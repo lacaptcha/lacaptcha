@@ -46,6 +46,16 @@ class CaptchaManager extends Manager
         return view($driver->view(), $driver->widgetData($options));
     }
 
+    /**
+     * The form field name the given (or default) driver's widget populates,
+     * so a validation rule and its matching error-display markup can agree
+     * on the same field without hardcoding each provider's own naming.
+     */
+    public function responseField(?string $driver = null): string
+    {
+        return $this->driver($driver)->responseField();
+    }
+
     protected function createHcaptchaDriver(): Driver
     {
         return new HcaptchaDriver(

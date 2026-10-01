@@ -33,6 +33,19 @@ it('throws a friendly exception for an unknown driver', function () {
     $manager->driver('does-not-exist');
 })->throws(UnsupportedDriverException::class);
 
+it('exposes the response field name of the default or a named driver', function () {
+    $manager = app(CaptchaManager::class);
+
+    expect($manager->responseField('hcaptcha'))->toBe('h-captcha-response')
+        ->and($manager->responseField('recaptcha'))->toBe('g-recaptcha-response')
+        ->and($manager->responseField('turnstile'))->toBe('cf-turnstile-response')
+        ->and($manager->responseField('null'))->toBe('null-response');
+
+    config()->set('captcha.default', 'turnstile');
+
+    expect($manager->responseField())->toBe('cf-turnstile-response');
+});
+
 it('propagates an InvalidArgumentException thrown inside a driver factory unchanged', function () {
     $manager = app(CaptchaManager::class);
 

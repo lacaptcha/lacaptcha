@@ -64,3 +64,9 @@ it('resolves an empty string driver name to the default, matching the real manag
 
     $fake->assertVerified('turnstile');
 });
+
+it('still reports the real response field name for a driver while faked', function () {
+    Captcha::fake();
+
+    expect(Captcha::responseField('turnstile'))->toBe('cf-turnstile-response');
+});

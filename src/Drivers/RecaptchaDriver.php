@@ -75,4 +75,9 @@ class RecaptchaDriver implements Driver
     {
         return 'recaptcha';
     }
+
+    public function responseField(): string
+    {
+        return 'g-recaptcha-response';
+    }
 }

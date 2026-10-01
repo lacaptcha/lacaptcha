@@ -43,4 +43,9 @@ class HcaptchaDriver implements Driver
     {
         return 'hcaptcha';
     }
+
+    public function responseField(): string
+    {
+        return 'h-captcha-response';
+    }
 }

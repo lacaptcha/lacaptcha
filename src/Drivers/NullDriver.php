@@ -41,4 +41,9 @@ class NullDriver implements Driver
     {
         return 'null';
     }
+
+    public function responseField(): string
+    {
+        return 'null-response';
+    }
 }
