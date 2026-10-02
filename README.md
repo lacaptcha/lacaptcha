@@ -1,5 +1,7 @@
 # lacaptcha/lacaptcha
 
+[![Tests](https://github.com/lacaptcha/lacaptcha/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/lacaptcha/lacaptcha/actions/workflows/tests.yml)
+
 Multi-provider captcha integration for Laravel. Drop a widget into any Blade form and validate it server-side, without coupling your app to a single captcha provider.
 
 Supported drivers out of the box:
